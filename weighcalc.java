@@ -1,21 +1,18 @@
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Scanner;
-public class weighcalc{
+public class weighCalc{
 
     public void kgtogram(double weigh){
-        int weighinkg = (int)weigh;
-        double weighingram =(weigh-weighinkg)*1000;
+        double totalgram = Math.round(weigh*1000*100.0)/100.0;
+        int weighinkg = (int)(totalgram/1000);
 
-        BigDecimal bd = new BigDecimal(Double.toString(weighingram));
-        bd = bd.setScale(2,RoundingMode.HALF_UP);
-        double result = bd.doubleValue();
-
-        if(weigh >= 1){
-            System.out.println(weighinkg+" kg "+result+"gram");
+        double weighingram =totalgram%1000;
+        String formatted = String.format("%.2f", weighingram);
+        
+        if(weighinkg >= 1){
+            System.out.println(weighinkg+" kg "+formatted+"gram");
         }
         else{
-            System.out.println(result+" gram");
+            System.out.println(formatted+" gram");
         }
     }
     public static void main(String [] args){
@@ -23,15 +20,23 @@ public class weighcalc{
         try (Scanner sc = new Scanner(System.in)){
             
             double rate = sc.nextDouble();
+            while(rate <= 0.0){
+                System.out.print("Rate must be positve! Enter rate per kg: ");
+                rate = sc.nextDouble();
+            }
             
             System.out.print("Enter the amount: ");
-            int amount = sc.nextInt();
+            double amount = sc.nextDouble();
+            while(amount<0.0){
+                System.out.print("Amount must be greater than zero! Enter the correct amount.");
+                amount = sc.nextDouble();
+            }
             
             double weigh = amount/rate;
-            weighcalc d = new weighcalc();
+            weighCalc d = new weighCalc();
             d.kgtogram(weigh);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Invalid values");
         }
     }
 }
